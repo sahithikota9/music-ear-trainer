@@ -1,45 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Music Ear Trainer</title>
-
-  <!-- Tone.js CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
-
-  <!-- Your JS + CSS -->
-  <script defer src="script.js"></script>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interval Ear Trainer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
 </head>
-
 <body>
-  <h1>Music Ear Trainer</h1>
-  <p>Tap once anywhere on the page to enable sound.</p>
 
-  <!-- Piano Section -->
-  <section>
-    <h2>Piano Interval Trainer</h2>
-    <button id="play-interval">Play Interval</button>
-    <div id="interval-buttons"></div>
-    <p id="interval-result"></p>
-  </section>
+    <div class="container">
+        <h1>🎵 Interval Ear Trainer</h1>
 
-  <!-- Guitar Section -->
-  <section>
-    <h2>Guitar Power Chord Trainer</h2>
-    <button id="play-chord">Play Power Chord</button>
-    <div id="chord-buttons"></div>
-    <p id="chord-result"></p>
-  </section>
+        <button id="test-audio" class="primary">Test Audio</button>
 
-  <!-- Drums Section -->
-  <section>
-    <h2>Drum Tempo Trainer</h2>
-    <button id="play-tempo">Play Beat</button>
-    <div id="tempo-buttons"></div>
-    <p id="tempo-result"></p>
-  </section>
+        <button id="play-interval" class="accent">Play Interval</button>
 
+        <h2>Your Guess</h2>
+        <div id="buttons" class="button-grid"></div>
+
+        <h2 id="result"></h2>
+        <h3 id="score">Score: 0</h3>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

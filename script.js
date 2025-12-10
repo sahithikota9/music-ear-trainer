@@ -1,99 +1,99 @@
-// Unlock Audio on first click
-document.body.addEventListener("click", async () => {
-  if (Tone.context.state !== "running") {
-    await Tone.start();
-  }
+// Unlock audio on first touch/click
+document.addEventListener("click", async () => {
+    if (Tone.context.state !== "running") {
+        await Tone.context.resume();
+        console.log("AudioContext resumed");
+    }
 }, { once: true });
 
-/* ---------------- PIANO INTERVAL TRAINER ---------------- */
 
-const intervals = [
-  { name: "Minor 2nd", semitones: 1 },
-  { name: "Major 2nd", semitones: 2 },
-  { name: "Minor 3rd", semitones: 3 },
-  { name: "Major 3rd", semitones: 4 },
-  { name: "Perfect 4th", semitones: 5 },
-  { name: "Tritone", semitones: 6 },
-  { name: "Perfect 5th", semitones: 7 }
-];
-
-const piano = new Tone.Synth().toDestination();
-let intervalAnswer;
-
-document.getElementById("play-interval").onclick = () => {
-  const root = 60 + Math.floor(Math.random() * 12); // random MIDI
-  const intObj = intervals[Math.floor(Math.random() * intervals.length)];
-  intervalAnswer = intObj.name;
-
-  piano.triggerAttackRelease(Tone.Frequency(root, "midi"), "8n");
-  piano.triggerAttackRelease(Tone.Frequency(root + intObj.semitones, "midi"), "8n", "+0.5");
-};
-
-const intervalButtonsDiv = document.getElementById("interval-buttons");
-intervals.forEach(i => {
-  const btn = document.createElement("button");
-  btn.textContent = i.name;
-  btn.onclick = () => {
-    document.getElementById("interval-result").textContent =
-      i.name === intervalAnswer ? "Correct!" : `Nope! It was ${intervalAnswer}`;
-  };
-  intervalButtonsDiv.appendChild(btn);
+// ------------------
+// Test beep
+// ------------------
+document.getElementById("test-audio").addEventListener("click", async () => {
+    await Tone.start();
+    let synth = new Tone.Synth().toDestination();
+    synth.triggerAttackRelease("C4", "8n");
 });
 
-/* ---------------- GUITAR POWER CHORD TRAINER ---------------- */
 
-const guitar = new Tone.MonoSynth().toDestination();
-const chords = [
-  { name: "5th Chord", interval: 7 },
-  { name: "4th Chord", interval: 5 },
-  { name: "Minor 6", interval: 8 }
-];
+// Synth for intervals
+const synth = new Tone.Synth().toDestination();
 
-let chordAnswer;
-
-document.getElementById("play-chord").onclick = () => {
-  const root = 40 + Math.floor(Math.random() * 12);
-  const ch = chords[Math.floor(Math.random() * chords.length)];
-  chordAnswer = ch.name;
-
-  guitar.triggerAttackRelease(Tone.Frequency(root, "midi"), "8n");
-  guitar.triggerAttackRelease(Tone.Frequency(root + ch.interval, "midi"), "8n", "+0.1");
+// Interval data
+const INTERVALS = {
+    "Minor 2nd": 1,
+    "Major 2nd": 2,
+    "Minor 3rd": 3,
+    "Major 3rd": 4,
+    "Perfect 4th": 5,
+    "Tritone": 6,
+    "Perfect 5th": 7,
+    "Minor 6th": 8,
+    "Major 6th": 9,
+    "Minor 7th": 10,
+    "Major 7th": 11,
+    "Octave": 12
 };
 
-const chordButtonsDiv = document.getElementById("chord-buttons");
-chords.forEach(c => {
-  const btn = document.createElement("button");
-  btn.textContent = c.name;
-  btn.onclick = () => {
-    document.getElementById("chord-result").textContent =
-      c.name === chordAnswer ? "Correct!" : `Nope! It was ${chordAnswer}`;
-  };
-  chordButtonsDiv.appendChild(btn);
+const NOTES = ["C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"];
+
+let currentInterval = null;
+let score = 0;
+
+
+// Create interval choice buttons
+function createButtons() {
+    const container = document.getElementById("buttons");
+    container.innerHTML = "";
+
+    Object.keys(INTERVALS).forEach(intervalName => {
+        let btn = document.createElement("button");
+        btn.textContent = intervalName;
+        btn.className = "choice";
+        btn.addEventListener("click", () => checkAnswer(intervalName));
+        container.appendChild(btn);
+    });
+}
+createButtons();
+
+
+// Play interval
+document.getElementById("play-interval").addEventListener("click", async () => {
+    await Tone.start();
+
+    let rootIndex = Math.floor(Math.random() * NOTES.length);
+    let rootNote = NOTES[rootIndex];
+
+    let intervalNames = Object.keys(INTERVALS);
+    currentInterval = intervalNames[Math.floor(Math.random() * intervalNames.length)];
+
+    let semitones = INTERVALS[currentInterval];
+    let secondNote = NOTES[(rootIndex + semitones) % NOTES.length];
+
+    console.log("Interval:", currentInterval, rootNote, secondNote);
+
+    synth.triggerAttackRelease(rootNote, "8n");
+    setTimeout(() => {
+        synth.triggerAttackRelease(secondNote, "8n");
+    }, 600);
+
+    document.getElementById("result").textContent = "";
 });
 
-/* ---------------- DRUM TEMPO TRAINER ---------------- */
 
-const drum = new Tone.MembraneSynth().toDestination();
-let tempoAnswer;
+// Evaluate answer
+function checkAnswer(guess) {
+    const result = document.getElementById("result");
 
-document.getElementById("play-tempo").onclick = () => {
-  tempoAnswer = [60, 80, 100, 120][Math.floor(Math.random() * 4)];
+    if (guess === currentInterval) {
+        result.textContent = "Correct!";
+        result.style.color = "green";
+        score++;
+    } else {
+        result.textContent = "Incorrect — it was: " + currentInterval;
+        result.style.color = "red";
+    }
 
-  const now = Tone.now();
-  for (let i = 0; i < 4; i++) {
-    drum.triggerAttackRelease("C2", "8n", now + i * (60 / tempoAnswer));
-  }
-};
-
-const tempos = [60, 80, 100, 120];
-const tempoButtonsDiv = document.getElementById("tempo-buttons");
-
-tempos.forEach(t => {
-  const btn = document.createElement("button");
-  btn.textContent = t + " BPM";
-  btn.onclick = () => {
-    document.getElementById("tempo-result").textContent =
-      t === tempoAnswer ? "Correct!" : `Nope! It was ${tempoAnswer} BPM`;
-  };
-  tempoButtonsDiv.appendChild(btn);
-});
+    document.getElementById("score").textContent = "Score: " + score;
+}
