@@ -1,1 +1,0 @@
-# music-ear-trainer
