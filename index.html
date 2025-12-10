@@ -1,87 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Music Ear Trainer — Piano · Guitar · Drums</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Ear Trainer</title>
 
   <!-- Tone.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
 
+  <!-- Your JS + CSS -->
+  <script defer src="script.js"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <header>
-    <h1>Music Ear Trainer</h1>
-    <p class="subtitle">Piano · Guitar · Drums — quick ear training for music students</p>
-  </header>
+  <h1>Music Ear Trainer</h1>
+  <p>Tap once anywhere on the page to enable sound.</p>
 
-  <main>
-    <nav class="tabs">
-      <button class="tab active" data-tab="piano">Piano</button>
-      <button class="tab" data-tab="guitar">Guitar</button>
-      <button class="tab" data-tab="drums">Drums</button>
-    </nav>
+  <!-- Piano Section -->
+  <section>
+    <h2>Piano Interval Trainer</h2>
+    <button id="play-interval">Play Interval</button>
+    <div id="interval-buttons"></div>
+    <p id="interval-result"></p>
+  </section>
 
-    <section id="content">
+  <!-- Guitar Section -->
+  <section>
+    <h2>Guitar Power Chord Trainer</h2>
+    <button id="play-chord">Play Power Chord</button>
+    <div id="chord-buttons"></div>
+    <p id="chord-result"></p>
+  </section>
 
-      <!-- PIANO -->
-      <div id="piano" class="panel visible">
-        <h2>Piano Mode</h2>
-        <div class="controls-row">
-          <label>Difficulty:
-            <select id="piano-diff">
-              <option value="easy">Easy (M2,M3,P5)</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-          </label>
-          <button id="piano-play-interval" class="primary">Play Interval</button>
-          <button id="piano-play-chord" class="primary">Play Chord</button>
-          <button id="piano-play-inversion" class="primary">Play Inversion</button>
-        </div>
+  <!-- Drums Section -->
+  <section>
+    <h2>Drum Tempo Trainer</h2>
+    <button id="play-tempo">Play Beat</button>
+    <div id="tempo-buttons"></div>
+    <p id="tempo-result"></p>
+  </section>
 
-        <div id="piano-choices" class="choices"></div>
-        <div class="score-row">Score: <span id="piano-score">0</span> / <span id="piano-trials">0</span></div>
-        <div class="hint">Tip: Use headphones for best results.</div>
-      </div>
-
-      <!-- GUITAR -->
-      <div id="guitar" class="panel">
-        <h2>Guitar Mode</h2>
-        <div class="controls-row">
-          <button id="guitar-play-power" class="primary">Play Power Chord</button>
-          <button id="guitar-play-interval" class="primary">Play Interval</button>
-          <button id="guitar-play-strum" class="primary">Play Strum Pattern</button>
-        </div>
-
-        <div id="guitar-choices" class="choices"></div>
-        <div class="score-row">Score: <span id="guitar-score">0</span> / <span id="guitar-trials">0</span></div>
-      </div>
-
-      <!-- DRUMS -->
-      <div id="drums" class="panel">
-        <h2>Drums Mode</h2>
-        <div class="controls-row">
-          <button id="drum-play-tempo" class="primary">Play Tempo (Guess)</button>
-          <button id="drum-play-sub" class="primary">Play Subdivision</button>
-          <button id="drum-play-rhythm" class="primary">Play Rhythm Dictation</button>
-        </div>
-
-        <div id="drum-choices" class="choices"></div>
-        <div class="score-row">Score: <span id="drum-score">0</span> / <span id="drum-trials">0</span></div>
-      </div>
-
-    </section>
-
-    <footer>
-      <small>Made for the local music school. Built with Tone.js — no downloads required.</small>
-      <div class="links">
-        <button id="reset-scores">Reset Scores</button>
-      </div>
-    </footer>
-  </main>
-
-  <script src="script.js"></script>
 </body>
 </html>
